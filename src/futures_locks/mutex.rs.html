@@ -351,6 +351,9 @@
 <span id="351">351</span>
 <span id="352">352</span>
 <span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
 </pre><pre class="rust ">
 <span class="comment">// vim: tw=80</span>
 
@@ -650,6 +653,9 @@
     <span class="doccomment">/// Acquires a `Mutex` and performs a computation on its guarded value in a</span>
     <span class="doccomment">/// separate task.  Returns a `Future` containing the result of the</span>
     <span class="doccomment">/// computation.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// *This method requires Futures-locks to be build with the `&quot;tokio&quot;`</span>
+    <span class="doccomment">/// feature.*</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// When using Tokio, this method will often hold the `Mutex` for less time</span>
     <span class="doccomment">/// than chaining a computation to [`lock`](#method.lock).  The reason is</span>

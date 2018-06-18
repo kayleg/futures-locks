@@ -604,6 +604,12 @@
 <span id="604">604</span>
 <span id="605">605</span>
 <span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
 </pre><pre class="rust ">
 <span class="comment">// vim: tw=80</span>
 
@@ -1101,6 +1107,9 @@
     <span class="doccomment">/// guarded value in a separate task.  Returns a `Future` containing the</span>
     <span class="doccomment">/// result of the computation.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// *This method requires Futures-locks to be build with the `&quot;tokio&quot;`</span>
+    <span class="doccomment">/// feature.*</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// When using Tokio, this method will often hold the `RwLock` for less time</span>
     <span class="doccomment">/// than chaining a computation to [`read`](#method.read).  The reason is</span>
     <span class="doccomment">/// that Tokio polls all tasks promptly upon notification.  However, Tokio</span>
@@ -1155,6 +1164,9 @@
     <span class="doccomment">/// Acquires a `RwLock` exclusively and performs a computation on its</span>
     <span class="doccomment">/// guarded value in a separate task.  Returns a `Future` containing the</span>
     <span class="doccomment">/// result of the computation.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// *This method requires Futures-locks to be build with the `&quot;tokio&quot;`</span>
+    <span class="doccomment">/// feature.*</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// When using Tokio, this method will often hold the `RwLock` for less time</span>
     <span class="doccomment">/// than chaining a computation to [`write`](#method.write).  The reason is</span>
