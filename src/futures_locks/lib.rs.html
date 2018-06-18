@@ -24,6 +24,7 @@
 <span id="24">24</span>
 <span id="25">25</span>
 <span id="26">26</span>
+<span id="27">27</span>
 </pre><pre class="rust ">
 <span class="comment">// vim: tw=80</span>
 
@@ -35,6 +36,7 @@
 <span class="doccomment">//! [`Tokio`]: https:/tokio.rs</span>
 
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">futures</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio&quot;</span>)]</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">tokio</span>;
 
 <span class="kw">mod</span> <span class="ident">mutex</span>;
 <span class="kw">mod</span> <span class="ident">rwlock</span>;

@@ -291,10 +291,72 @@
 <span id="291">291</span>
 <span id="292">292</span>
 <span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
 </pre><pre class="rust ">
 <span class="comment">// vim: tw=80</span>
 
 <span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">Async</span>, <span class="ident">Future</span>, <span class="ident">Poll</span>};
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio&quot;</span>)]</span> <span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">future</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio&quot;</span>)]</span> <span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">future</span>::<span class="ident">IntoFuture</span>;
 <span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">sync</span>::<span class="ident">oneshot</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">UnsafeCell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">clone</span>::<span class="ident">Clone</span>;
@@ -302,6 +364,7 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>;
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">FutState</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio&quot;</span>)]</span> <span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">executor</span>::<span class="ident">current_thread</span>;
 
 <span class="doccomment">/// An RAII mutex guard, much like `std::sync::MutexGuard`.  The wrapped data</span>
 <span class="doccomment">/// can be accessed via its `Deref` and `DerefMut` implementations.</span>
@@ -375,7 +438,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">MutexFut</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">MutexFut</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">MutexGuard</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> ();
 
@@ -580,6 +643,63 @@
             <span class="comment">// Relinquish ownership</span>
             <span class="ident">mtx_data</span>.<span class="ident">owned</span> <span class="op">=</span> <span class="bool-val">false</span>;
         }
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Acquires a `Mutex` and performs a computation on its guarded value in a</span>
+    <span class="doccomment">/// separate task.  Returns a `Future` containing the result of the</span>
+    <span class="doccomment">/// computation.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// When using Tokio, this method will often hold the `Mutex` for less time</span>
+    <span class="doccomment">/// than chaining a computation to [`lock`](#method.lock).  The reason is</span>
+    <span class="doccomment">/// that Tokio polls all tasks promptly upon notification.  However, Tokio</span>
+    <span class="doccomment">/// does not guarantee that it will poll all futures promptly when their</span>
+    <span class="doccomment">/// owning task gets notified.  So it&#39;s best to hold `Mutex`es within their</span>
+    <span class="doccomment">/// own tasks, lest their continuations get blocked by slow stacked</span>
+    <span class="doccomment">/// combinators.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// # extern crate futures;</span>
+    <span class="doccomment">/// # extern crate futures_locks;</span>
+    <span class="doccomment">/// # extern crate tokio;</span>
+    <span class="doccomment">/// # use futures_locks::*;</span>
+    <span class="doccomment">/// # use futures::{Future, IntoFuture, lazy};</span>
+    <span class="doccomment">/// # use tokio::executor::current_thread;</span>
+    <span class="doccomment">/// # fn main() {</span>
+    <span class="doccomment">/// let mtx = Mutex::&lt;u32&gt;::new(0);</span>
+    <span class="doccomment">/// let r = current_thread::block_on_all(lazy(|| {</span>
+    <span class="doccomment">///     mtx.with(|mut guard| {</span>
+    <span class="doccomment">///         *guard += 5;</span>
+    <span class="doccomment">///         Ok(()) as Result&lt;(), ()&gt;</span>
+    <span class="doccomment">///     })</span>
+    <span class="doccomment">///     .map(|_| assert_eq!(mtx.try_unwrap().unwrap(), 5))</span>
+    <span class="doccomment">/// }));</span>
+    <span class="doccomment">/// assert!(r.is_ok());</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">B</span>, <span class="ident">R</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="ident">oneshot</span>::<span class="ident">Receiver</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">E</span><span class="op">&gt;&gt;</span>
+        <span class="kw">where</span> <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">MutexGuard</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">B</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+              <span class="ident">B</span>: <span class="ident">IntoFuture</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">R</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+              <span class="ident">R</span>: <span class="lifetime">&#39;static</span>,
+              <span class="ident">E</span>: <span class="lifetime">&#39;static</span>
+    {
+        <span class="kw">let</span> (<span class="ident">tx</span>, <span class="ident">rx</span>) <span class="op">=</span> <span class="ident">oneshot</span>::<span class="ident">channel</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">E</span><span class="op">&gt;&gt;</span>();
+        <span class="ident">current_thread</span>::<span class="ident">spawn</span>(<span class="self">self</span>.<span class="ident">lock</span>()
+            .<span class="ident">and_then</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">data</span><span class="op">|</span> {
+                <span class="ident">f</span>(<span class="ident">data</span>).<span class="ident">into_future</span>()
+                       .<span class="ident">then</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">result</span><span class="op">|</span> {
+                           <span class="comment">// Swallow errors; there&#39;s nothing to do if the</span>
+                           <span class="comment">// receiver got cancelled</span>
+                           <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">tx</span>.<span class="ident">send</span>(<span class="ident">result</span>);
+                           <span class="ident">future</span>::<span class="ident">ok</span>::<span class="op">&lt;</span>(), ()<span class="op">&gt;</span>(())
+                       })
+            })
+        );
+        <span class="ident">rx</span>
     }
 }
 
