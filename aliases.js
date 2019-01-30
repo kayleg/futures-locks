@@ -1,4 +1,7 @@
 var ALIASES = {};
+ALIASES['futures'] = {};
+ALIASES['futures_locks'] = {};
+ALIASES['futures_locks'] = {};
 ALIASES['futures_locks'] = {};
 ALIASES['futures_locks'] = {};
 ALIASES['futures_locks'] = {};
