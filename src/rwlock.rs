@@ -498,8 +498,10 @@ impl<T: ?Sized> RwLock<T> {
         } else {
             lock_data.exclusive = false;
             lock_data.num_readers += lock_data.read_waiters.len() as u32;
-            for tx in lock_data.read_waiters.drain(..) {
+            let readers = lock_data.read_waiters.drain(..).collect::<Vec<_>>();
+            for tx in readers {
                 if tx.send(()).is_err() {
+                    lock_data.num_readers -= 1;
                     eprintln!("Read lock was canceled before acquired")
                 }
             }
