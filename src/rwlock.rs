@@ -492,18 +492,17 @@ impl<T: ?Sized> RwLock<T> {
                 if tx.send(()).is_err() {
                     eprintln!("Write lock was canceled before acquired")
                 } else {
-                    break;
+                    return;
                 }
             }
-        } else {
-            lock_data.exclusive = false;
-            lock_data.num_readers += lock_data.read_waiters.len() as u32;
-            let readers = lock_data.read_waiters.drain(..).collect::<Vec<_>>();
-            for tx in readers {
-                if tx.send(()).is_err() {
-                    lock_data.num_readers -= 1;
-                    eprintln!("Read lock was canceled before acquired")
-                }
+        }
+        lock_data.exclusive = false;
+        let readers = lock_data.read_waiters.drain(..).collect::<Vec<_>>();
+        lock_data.num_readers += readers.len() as u32;
+        for tx in readers {
+            if tx.send(()).is_err() {
+                lock_data.num_readers -= 1;
+                eprintln!("Read lock was canceled before acquired")
             }
         }
     }
