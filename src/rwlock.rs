@@ -471,7 +471,9 @@ impl<T: ?Sized> RwLock<T> {
         lock_data.num_readers -= 1;
         if lock_data.num_readers == 0 {
             while let Some(tx) = lock_data.write_waiters.pop_front() {
+                lock_data.exclusive = true;
                 if tx.send(()).is_err() {
+                    lock_data.exclusive = false;
                     eprintln!("Write lock was canceled before acquired")
                 } else {
                     break;
